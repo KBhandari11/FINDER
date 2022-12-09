@@ -22,6 +22,9 @@ import mvc_env
 import utils
 import os
 
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
+
 # Hyper Parameters:
 cdef double GAMMA = 1  # decay rate of past observations
 cdef int UPDATE_TIME = 1000
