@@ -8,7 +8,8 @@ from graph cimport Graph
 import tensorflow as tf
 from scipy.sparse import coo_matrix
 # import gc
-
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 
 cdef class py_sparseMatrix:
     cdef shared_ptr[sparseMatrix] inner_sparseMatrix
