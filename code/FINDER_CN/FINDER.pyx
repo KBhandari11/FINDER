@@ -637,7 +637,7 @@ class FINDER:
                 f_out.write('%.16f\n'%(frac/n_valid))   #write vc into the file
                 f_out.flush()
                 print('iter %d, eps %.4f, average size of vc:%.6f'%(iter, eps, frac/n_valid))
-                print ('testing 50 graphs time: %.2fs'%(test_end-test_start))
+                print ('testing 100 graphs time: %.2fs'%(test_end-test_start))
                 N_end = time.process_time()
                 print ('500 iterations total time: %.2fs\n'%(N_end-N_start))
                 sys.stdout.flush()
