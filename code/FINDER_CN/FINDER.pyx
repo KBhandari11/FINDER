@@ -1,4 +1,4 @@
-#%%writefile /content/FINDER/code/FINDER_CN/FINDER.pyx
+##%%writefile /content/FINDER/code/FINDER_CN/FINDER.pyx
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
@@ -47,7 +47,7 @@ cdef int NUM_MAX = 50
 cdef int REG_HIDDEN = 32
 cdef int BATCH_SIZE = 64
 cdef double initialization_stddev = 0.01  # 权重初始化的方差
-cdef int n_valid = 50
+cdef int n_valid = 100
 cdef int aux_dim = 4
 cdef int num_env = 1
 cdef double inf = 2147483647/2
