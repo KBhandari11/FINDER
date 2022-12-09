@@ -1,4 +1,4 @@
-##%%writefile /content/FINDER/code/FINDER_CN/testReal.py
+##%%writefile /content/FINDER/code/FINDER_ND/testReal.py
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import sys,os
@@ -24,10 +24,10 @@ def GetSolution(STEPRATIO, MODEL_FILE_CKPT):
     ######################################################################################################################
     ##................................................Get Solution (model).....................................................
     dqn = FINDER()
-    data_test_path = '/content/FINDER/code/FINDER_CN/data/real/'
+    data_test_path = '/content/FINDER/code/FINDER_ND/data/real/'
     #data_test_name = ['Crime','HI-II-14','Digg','Enron','Gnutella31','Epinions','Facebook','Youtube','Flickr']
     data_test_name = [f for f in listdir(data_test_path) if isfile(join(data_test_path, f))]
-    #model_file_path = '/content/FINDER/code/FINDER_CN/models/barabasi_albert/'
+    #model_file_path = '/content/FINDER/code/FINDER_ND/models/barabasi_albert/'
     #model_file_ckpt = MODEL_FILE_CKPT
     model_file = MODEL_FILE_CKPT
     ## save_dir
@@ -57,7 +57,7 @@ def EvaluateSolution(STEPRATIO, MODEL_FILE_CKPT, STRTEGYID):
     #######################################################################################################################
     ##................................................Evaluate Solution.....................................................
     dqn = FINDER()
-    data_test_path = '/content/FINDER/code/FINDER_CN/data/real/'
+    data_test_path = '/content/FINDER/code/FINDER_ND/data/real/'
     #     data_test_name = ['Crime', 'HI-II-14', 'Digg', 'Enron', 'Gnutella31', 'Epinions', 'Facebook', 'Youtube', 'Flickr']
     data_test_name = [f for f in listdir(data_test_path) if isfile(join(data_test_path, f))]
     save_dir = '/content/FINDER/code/results/StepRatio_%.4f/'%STEPRATIO
@@ -85,7 +85,7 @@ def EvaluateSolution(STEPRATIO, MODEL_FILE_CKPT, STRTEGYID):
 def findModel():
     NUM_MIN, NUM_MAX = 30, 50
     g_type = 'barabasi_albert'
-    VCFile = '/content/FINDER/code/FINDER_CN/models/%s/ModelVC_%d_%d.csv'%(g_type, NUM_MIN, NUM_MAX)
+    VCFile = '/content/FINDER/code/FINDER_ND/models/%s/ModelVC_%d_%d.csv'%(g_type, NUM_MIN, NUM_MAX)
     vc_list = []
     with open(VCFile, newline='') as csvfile:
          #reader = csv.DictReader(csvfile)
@@ -98,7 +98,7 @@ def findModel():
     plt.show()
     min_vc = start_loc + np.argmin(vc_list[start_loc:])
     best_model_iter = 500 * min_vc
-    best_model = '/content/FINDER/code/FINDER_CN/models/%s/nrange_%d_%d_iter_%d.ckpt' % (g_type, NUM_MIN, NUM_MAX, best_model_iter)
+    best_model = '/content/FINDER/code/FINDER_ND/models/%s/nrange_%d_%d_iter_%d.ckpt' % (g_type, NUM_MIN, NUM_MAX, best_model_iter)
     return best_model
 
 
