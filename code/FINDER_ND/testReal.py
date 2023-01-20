@@ -85,7 +85,7 @@ def EvaluateSolution(STEPRATIO, MODEL_FILE_CKPT, STRTEGYID):
 def findModel():
     NUM_MIN, NUM_MAX = 30, 50
     g_type = 'barabasi_albert'
-    VCFile = '/content/FINDER/code/FINDER_ND/models/%s/ModelVC_%d_%d.csv'%(g_type, NUM_MIN, NUM_MAX)
+    VCFile = '/content/FINDER/code/FINDER_ND/models/Model_%s/ModelVC_%d_%d.csv'%(g_type, NUM_MIN, NUM_MAX)
     vc_list = []
     with open(VCFile, newline='') as csvfile:
          #reader = csv.DictReader(csvfile)
@@ -98,7 +98,7 @@ def findModel():
     plt.show()
     min_vc = start_loc + np.argmin(vc_list[start_loc:])
     best_model_iter = 500 * min_vc
-    best_model = '/content/FINDER/code/FINDER_ND/models/%s/nrange_%d_%d_iter_%d.ckpt' % (g_type, NUM_MIN, NUM_MAX, best_model_iter)
+    best_model = '/content/FINDER/code/FINDER_ND/models/Model_%s/nrange_%d_%d_iter_%d.ckpt' % (g_type, NUM_MIN, NUM_MAX, best_model_iter)
     return best_model
 
 
