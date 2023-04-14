@@ -1,4 +1,3 @@
-##%%writefile /content/FINDER/code/FINDER_CN/FINDER.pyx
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
@@ -24,15 +23,14 @@ import mvc_env
 import utils
 import scipy.linalg as linalg
 import os
-import tensorflow.compat.v1 as tf
-tf.disable_v2_behavior()
+
 # Hyper Parameters:
 cdef double GAMMA = 1  # decay rate of past observations
 cdef int UPDATE_TIME = 1000
 cdef int EMBEDDING_SIZE = 64
-cdef int MAX_ITERATION = 100000
+cdef int MAX_ITERATION = 500000
 cdef double LEARNING_RATE = 0.0001   #dai
-cdef int MEMORY_SIZE = 100000
+cdef int MEMORY_SIZE = 500000
 cdef double Alpha = 0.001 ## weight of reconstruction loss
 ########################### hyperparameters for priority(start)#########################################
 cdef double epsilon = 0.0000001  # small amount to avoid zero priority
@@ -47,7 +45,7 @@ cdef int NUM_MAX = 50
 cdef int REG_HIDDEN = 32
 cdef int BATCH_SIZE = 64
 cdef double initialization_stddev = 0.01  # 权重初始化的方差
-cdef int n_valid = 100
+cdef int n_valid = 200
 cdef int aux_dim = 4
 cdef int num_env = 1
 cdef double inf = 2147483647/2
@@ -609,14 +607,14 @@ class FINDER:
         cdef int loss = 0
         cdef double frac, start, end
 
-        save_dir = './models/%s'%self.g_type
-        #save_dir = './models/Model_powerlaw'
+        #save_dir = './models/%s'%self.g_type
+        save_dir = './models/Model_powerlaw'
         if not os.path.exists(save_dir):
             os.mkdir(save_dir)
         VCFile = '%s/ModelVC_%d_%d.csv'%(save_dir, NUM_MIN, NUM_MAX)
         f_out = open(VCFile, 'w')
         for iter in range(MAX_ITERATION):
-            start = time.process_time()
+            start = time.clock()
             ###########-----------------------normal training data setup(start) -----------------##############################
             if iter and iter % 5000 == 0:
                 self.gen_new_graphs(NUM_MIN, NUM_MAX)
@@ -624,7 +622,7 @@ class FINDER:
 
             if iter % 10 == 0:
                 self.PlayGame(10, eps)
-            if iter % 500 == 0:
+            if iter % 300 == 0:
                 if(iter == 0):
                     N_start = start
                 else:
@@ -637,9 +635,9 @@ class FINDER:
                 f_out.write('%.16f\n'%(frac/n_valid))   #write vc into the file
                 f_out.flush()
                 print('iter %d, eps %.4f, average size of vc:%.6f'%(iter, eps, frac/n_valid))
-                print ('testing 100 graphs time: %.2fs'%(test_end-test_start))
-                N_end = time.process_time()
-                print ('500 iterations total time: %.2fs\n'%(N_end-N_start))
+                print ('testing 200 graphs time: %.2fs'%(test_end-test_start))
+                N_end = time.clock()
+                print ('300 iterations total time: %.2fs\n'%(N_end-N_start))
                 sys.stdout.flush()
                 model_path = '%s/nrange_%d_%d_iter_%d.ckpt' % (save_dir, NUM_MIN, NUM_MAX, iter)
                 self.SaveModel(model_path)
@@ -656,7 +654,7 @@ class FINDER:
             vc_list.append(float(line))
         start_loc = 33
         min_vc = start_loc + np.argmin(vc_list[start_loc:])
-        best_model_iter = 500 * min_vc
+        best_model_iter = 300 * min_vc
         best_model = './models/%s/nrange_%d_%d_iter_%d.ckpt' % (self.g_type, NUM_MIN, NUM_MAX, best_model_iter)
         return best_model
 
@@ -846,9 +844,12 @@ class FINDER:
         print('restore model from file successfully')
 
     def GenNetwork(self, g):    #networkx2four
-        nodes = g.nodes()
-        map = {n:int(i) for i, n in enumerate(nodes)}
-        GRAPH = nx.relabel_nodes(g, map)
+        mapping = {}
+        for i, j in enumerate(g):
+            mapping[j] = i
+        '''for i, j in zip(sorted(g), [sorted(g).index(i) for i in sorted(g)]):
+            mapping[i] = j'''
+        g = nx.relabel_nodes(g, mapping)
         edges = g.edges()
         if len(edges) > 0:
             a, b = zip(*edges)

@@ -5,7 +5,7 @@ Created on Tue Dec 19 00:33:33 2017
 
 @author: fanchangjun
 """
-
+#python setup.py build_ext -i > /dev/null
 from __future__ import print_function, division
 import tensorflow as tf
 import numpy as np
@@ -21,9 +21,6 @@ import nstep_replay_mem_prioritized
 import mvc_env
 import utils
 import os
-
-import tensorflow.compat.v1 as tf
-tf.disable_v2_behavior()
 
 # Hyper Parameters:
 cdef double GAMMA = 1  # decay rate of past observations
@@ -824,10 +821,12 @@ class FINDER:
         print('restore model from file successfully')
 
     def GenNetwork(self, g):    #networkx2four
-        nodes = g.nodes()
-        map = {n:int(i) for i, n in enumerate(nodes)}
-        GRAPH = nx.relabel_nodes(g, map)
-        edges = g.edges()
+        mapping = {}
+        for i, j in enumerate(g):
+            mapping[j] = i
+        '''for i, j in zip(sorted(g), [sorted(g).index(i) for i in sorted(g)]):
+            mapping[i] = j'''
+        g = nx.relabel_nodes(g, mapping)
         edges = g.edges()
         if len(edges) > 0:
             a, b = zip(*edges)
